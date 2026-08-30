@@ -45,40 +45,20 @@ def display_sessions():
         return
 
     print()
-    print(
-        f"{'ROOM':<28}"
-        f"{'PRIVACY':<12}"
-        f"{'FILE'}"
-    )
+    print(f"{'ROOM':<28}{'PRIVACY':<12}{'FILE'}")
     print("-" * 72)
 
     for item in reports:
         report = item["report"]
         path = item["path"]
 
-        room = (
-            report
-            .get("session", {})
-            .get("room", "unknown")
-        )
+        room = report.get("session", {}).get("room", "unknown")
 
-        findings = (
-            report
-            .get("privacy", {})
-            .get("findings", [])
-        )
+        findings = report.get("privacy", {}).get("findings", [])
 
-        privacy_status = (
-            f"{len(findings)} found"
-            if findings
-            else "none"
-        )
+        privacy_status = f"{len(findings)} found" if findings else "none"
 
-        print(
-            f"{room:<28}"
-            f"{privacy_status:<12}"
-            f"{path.name}"
-        )
+        print(f"{room:<28}{privacy_status:<12}{path.name}")
 
     print()
 
@@ -89,11 +69,7 @@ def find_report_by_room(room_name):
     matches = []
 
     for item in reports:
-        room = (
-            item["report"]
-            .get("session", {})
-            .get("room")
-        )
+        room = item["report"].get("session", {}).get("room")
 
         if room == room_name:
             matches.append(item)
@@ -119,11 +95,7 @@ def display_data_map(room_name):
         reports = load_reports()
 
         for report_item in reports:
-            room = (
-                report_item["report"]
-                .get("session", {})
-                .get("room", "unknown")
-            )
+            room = report_item["report"].get("session", {}).get("room", "unknown")
 
             print(f"  {room}")
 
@@ -203,15 +175,10 @@ def display_data_map(room_name):
                 "UNKNOWN",
             )
 
-            counts[category] = (
-                counts.get(category, 0) + 1
-            )
+            counts[category] = counts.get(category, 0) + 1
 
         for category, count in sorted(counts.items()):
-            print(
-                f"{category:<28}"
-                f"{count} detected"
-            )
+            print(f"{category:<28}{count} detected")
 
     print()
     print("DATA EXPOSURE")
@@ -245,26 +212,14 @@ def display_data_map(room_name):
     print("LOCATION / RESIDENCY")
     print("-" * 72)
 
-    print(
-        f"Agent compute:      "
-        f"{location.get('agent_compute', 'unknown')}"
-    )
+    print(f"Agent compute:      {location.get('agent_compute', 'unknown')}")
 
-    print(
-        f"LiveKit region:     "
-        f"{location.get('livekit_region', 'unknown')}"
-    )
+    print(f"LiveKit region:     {location.get('livekit_region', 'unknown')}")
 
-    print(
-        f"Model processing:   "
-        f"{location.get('model_processing_region', 'unknown')}"
-    )
+    print(f"Model processing:   {location.get('model_processing_region', 'unknown')}")
 
     print()
-    print(
-        "Unknown locations are intentionally left unknown "
-        "instead of being inferred."
-    )
+    print("Unknown locations are intentionally left unknown instead of being inferred.")
 
     print()
     print(f"Source report: {item['path']}")

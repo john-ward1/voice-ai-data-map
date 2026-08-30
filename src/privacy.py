@@ -2,22 +2,14 @@ import re
 from typing import Any
 
 PRIVACY_PATTERNS = {
-    "EMAIL_ADDRESS": re.compile(
-        r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
-    ),
+    "EMAIL_ADDRESS": re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
     "PHONE_NUMBER": re.compile(
         r"\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)"
         r"\d{3}[-.\s]?\d{4}\b"
     ),
-    "SSN_LIKE": re.compile(
-        r"\b\d{3}-\d{2}-\d{4}\b"
-    ),
-    "CARD_LIKE_NUMBER": re.compile(
-        r"\b(?:\d[ -]*?){13,19}\b"
-    ),
-    "FINANCIAL_AMOUNT": re.compile(
-        r"(?:\$|USD\s*)\d+(?:,\d{3})*(?:\.\d{2})?"
-    ),
+    "SSN_LIKE": re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
+    "CARD_LIKE_NUMBER": re.compile(r"\b(?:\d[ -]*?){13,19}\b"),
+    "FINANCIAL_AMOUNT": re.compile(r"(?:\$|USD\s*)\d+(?:,\d{3})*(?:\.\d{2})?"),
     "ACCOUNT_IDENTIFIER": re.compile(
         r"\b(?:account|acct|account number|customer id|customer number)"
         r"[\s:#-]*([A-Za-z0-9-]{4,})\b",
@@ -54,10 +46,7 @@ def extract_conversation(session_report: dict) -> list[dict]:
         role = item.get("role")
         content = item.get("content", [])
 
-        text_parts = [
-            value for value in content
-            if isinstance(value, str)
-        ]
+        text_parts = [value for value in content if isinstance(value, str)]
 
         text = " ".join(text_parts).strip()
 
@@ -101,9 +90,7 @@ def build_privacy_report(
                 }
             )
 
-    categories = sorted(
-    {finding["category"] for finding in all_findings}
-)
+    categories = sorted({finding["category"] for finding in all_findings})
 
     return {
         "session": {
@@ -112,15 +99,12 @@ def build_privacy_report(
             "job_id": session_report.get("job_id"),
             "sdk_version": session_report.get("sdk_version"),
         },
-
         "conversation": conversation,
-
         "privacy": {
             "sensitive_data_detected": bool(all_findings),
             "categories": categories,
             "findings": all_findings,
         },
-
         "supply_chain": [
             {
                 "component": "LiveKit Cloud",
@@ -189,7 +173,6 @@ def build_privacy_report(
                 "risk": "application-controlled copy of conversation",
             },
         ],
-
         "location": {
             "agent_compute": agent_location,
             "livekit_region": livekit_region,
@@ -214,8 +197,10 @@ def print_privacy_report(report: dict) -> None:
     print("-" * 64)
     print(f"Room:          {report['session'].get('room')}")
     print(f"Agent compute: {report['location']['agent_compute']}")
-    print(f"LiveKit region:{' ' if report['location']['livekit_region'] else ''}"
-          f"{report['location']['livekit_region']}")
+    print(
+        f"LiveKit region:{' ' if report['location']['livekit_region'] else ''}"
+        f"{report['location']['livekit_region']}"
+    )
 
     print()
     print("SUPPLY CHAIN")
@@ -242,10 +227,7 @@ def print_privacy_report(report: dict) -> None:
         print("No obvious sensitive values detected.")
     else:
         for finding in findings:
-            print(
-                f"{finding['category']:<22} "
-                f"{finding['value']}"
-            )
+            print(f"{finding['category']:<22} {finding['value']}")
 
     print()
     print("=" * 64)

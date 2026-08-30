@@ -55,6 +55,7 @@ REPORT_DIR = Path("reports")
 # Agent
 # -------------------------------------------------------------------
 
+
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
@@ -95,6 +96,7 @@ class Assistant(Agent):
 # Session-end privacy analysis
 # -------------------------------------------------------------------
 
+
 async def on_session_end(ctx: JobContext) -> None:
     try:
         livekit_report = ctx.make_session_report()
@@ -115,9 +117,7 @@ async def on_session_end(ctx: JobContext) -> None:
             exist_ok=True,
         )
 
-        timestamp = datetime.now(
-            timezone.utc
-        ).strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
 
         filename = REPORT_DIR / f"session_{timestamp}.json"
 
@@ -132,9 +132,7 @@ async def on_session_end(ctx: JobContext) -> None:
                 ensure_ascii=False,
             )
 
-        print_privacy_report(
-            privacy_report
-        )
+        print_privacy_report(privacy_report)
 
         logger.info(
             "Privacy report saved to %s",
@@ -142,9 +140,7 @@ async def on_session_end(ctx: JobContext) -> None:
         )
 
     except Exception:
-        logger.exception(
-            "Failed to create privacy report"
-        )
+        logger.exception("Failed to create privacy report")
 
 
 # -------------------------------------------------------------------
@@ -165,7 +161,6 @@ async def my_agent(ctx: JobContext):
     }
 
     session = AgentSession(
-
         # -----------------------------------------------------------
         # Speech-to-text
         # -----------------------------------------------------------
@@ -186,41 +181,33 @@ async def my_agent(ctx: JobContext):
                     "technical support issues, and privacy-related information. "
                     "Preserve numbers and identifying information accurately."
                 ),
-
                 # Give the speaker time for natural pauses.
                 # A very short forced turn boundary can fragment speech.
                 "max_turn_silence": 1000,
             },
         ),
-
         # -----------------------------------------------------------
         # Text-to-speech
         # -----------------------------------------------------------
-
         tts=inference.TTS(
             model=TTS_MODEL,
             voice="fa4c9eb3dccc4806b382b40d61c6b10a",
         ),
-
         # -----------------------------------------------------------
         # Turn handling
         # -----------------------------------------------------------
-
         turn_handling=TurnHandlingOptions(
             turn_detection=inference.TurnDetector(),
-
             # Keep adaptive interruption handling.
             interruption={
                 "mode": "adaptive",
             },
-
             # Disable this while debugging transcription.
             # We want a clean completed turn before the LLM reacts.
             preemptive_generation={
                 "enabled": False,
             },
         ),
-
         expressive=True,
     )
 
