@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
-
 from livekit.agents import (
     Agent,
     AgentServer,
@@ -17,11 +16,9 @@ from livekit.agents import (
     inference,
     room_io,
 )
-
 from livekit.plugins import ai_coustics
 
 from privacy import build_privacy_report, print_privacy_report
-
 
 logger = logging.getLogger("agent")
 

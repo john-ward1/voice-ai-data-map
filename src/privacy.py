@@ -1,7 +1,6 @@
 import re
 from typing import Any
 
-
 PRIVACY_PATTERNS = {
     "EMAIL_ADDRESS": re.compile(
         r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
@@ -103,8 +102,8 @@ def build_privacy_report(
             )
 
     categories = sorted(
-        set(finding["category"] for finding in all_findings)
-    )
+    {finding["category"] for finding in all_findings}
+)
 
     return {
         "session": {
