@@ -349,16 +349,14 @@ livekit-interaction-logger/
 
 - Python
 - `uv`
-- LiveKit CLI
 - a LiveKit Cloud project
+- LiveKit CLI (optional, for easier auth/dev workflow)
 
-Install the LiveKit CLI on macOS:
+Clone this repository:
 
 ```bash
-brew install livekit-cli
-```
-
-Install the project dependencies:
+git clone https://github.com/john-ward1/voice-ai-data-map.git
+cd voice-ai-data-map
 
 ```bash
 uv sync
